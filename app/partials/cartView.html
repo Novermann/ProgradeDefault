@@ -1,11 +1,42 @@
+<nav class="nav">
+    <ul>
+        <li><span class="text-primary">{{'Cart' | r}}</span></li>
+    	<li class="pull-right" ng-click="onPrint()"><span><i class="fa fa-print" rel="tooltip" title="{{'Print' | r}}" ></i></span></li>
+	</ul>
+</nav>
+<section class="get-rates panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Check Shipping Rates</h3>
+        </div>
+        <div class="panel-body">
+    		<div class="row">
+            <form id="rate-address">
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <label>States</label>
+                    <select ng-options="state.value as state.label for state in States" ng-model="location.selectedState"/>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <label>Zip</label>
+                    <input type="text" id="zip" name="zip" ng-model="location.selectedZip">
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <label>&nbsp;</label>
+                    <button ng-disabled="!location.selectedState || !location.selectedZip" class="btn btn-default" id="shipRateBtn" ng-click="fetch()">Get Rates</button>
+                    <br/>
+                    <br/>
+                    <div ng-repeat="r in rate">
+                        <span>{{r[$index].name}}:</span>
+                        <span>{{r[$index].rate}}</span>
+                    </div>
+                </div>
+            </form>
+    		</div>
+            <p style="text-align: center; color:red;">Outside the Continguous 48 States</p>
+            <p>Additional freight costs for Alaska, Hawaii and Canada will apply. If you require a freight quote, please put a note in the comments area when you place your order and someone will contact you. Additional freight charges will be added to your order.</p>
+        </div>
+</section>
 <section>
     <div ng-show="currentOrder" class="hidden-print">
-        <nav class="nav">
-            <ul>
-                <li><span class="text-primary">{{'Cart' | r | xlat}}</span></li>
-                <li class="pull-right" ng-click="onPrint()"><span><i class="fa fa-print text-primary" rel="tooltip" title="{{'Print' | r | xlat}}" ></i></span></li>
-            </ul>
-        </nav>
         <form ng-submit="saveChanges()" name="cart" novalidate="">
             <loadingindicator  ng-show="displayLoadingIndicator" title="{{'Please wait while we save your order' | r | xlat}}"/>
             <div>
@@ -133,7 +164,7 @@
                                     <span ng-show="toggleSpecs == true"><i class="fa fa-minus-circle"></i> {{('Hide' | r) + ' ' + ('Specification' | r) | xlat}}</span>
                                 </button>
                                 <ul ng-show="toggleSpecs == true" class="list-group">
-                                    <li ng-repeat="spec in item.Specs | filter:{'CanSetForLineItem':true} " class="list-group-item">
+                                    <li ng-repeat="spec in item.Specs | filter:{'CanSetForLineItem':true} | hideSpecs" class="list-group-item">
                                         <span class="text-info">{{spec.Label || spec.Name}}: </span>
                                         <span ng-if="spec.ControlType == 'File'"><a ng-href="{{spec.File.Url}}">{{spec.File.OriginalName + Extension}}</a></span></span>
                                         <span ng-if="spec.ControlType != 'File'">{{spec.Value || ('(unspecified)' | xlat)}}</span>
@@ -146,7 +177,7 @@
                 <div class="panel-footer">
                     <div class="row">
                         <div class="col-md-4 col-lg-3">
-                            <giftcardredemption ng-if="user.Permissions.contains('ViewPromotions')" />
+                            <!--<giftcardredemption ng-if="user.Permissions.contains('ViewPromotions')" />-->
                         </div>
                         <div class="col-md-3 col-md-offset-5 col-lg-4 text-right" ng-if="!(user.Permissions.contains('HidePricing'))">
                             <h4 class="text-primary">
@@ -163,7 +194,7 @@
                     </div>
                 </div>
             </div>
-            <div class="navbar-fixed-bottom">
+            <div class="navbar-fixed-bottom" style="position: relative;">
                 <div class="alert-warning text-center" style="padding: 10px;" ng-if="currentOrder.RepeatError">
                     {{'Some items were not added to your repeat order' | r | xlat}}: {{currentOrder.RepeatError}}
                 </div>
@@ -198,27 +229,23 @@
                         </li>
                     </ul>
                 </div>
-                <ul>
-                    <li>
-                        <button type="button" class="btn btn-danger" ng-click="currentOrder.Status == 'AwaitingApproval' ? cancelEdit() : cancelOrder()">
-                            <small ng-if="currentOrder.Status != 'AwaitingApproval'">{{('Cancel' | r) + ' ' + ('Order' | r) | xlat}}</small>
-                            <small ng-if="currentOrder.Status == 'AwaitingApproval'">{{('Cancel' | r) + ' ' + ('Edit' | r) | xlat}}</small>
-                        </button>
-                    </li>
-                    <li>
-                        <button type="submit" class="btn btn-primary" ng-click="saveChanges()">
-                            <loadingindicator  ng-show="displayLoadingIndicator" />
-                            <small>{{('Save' | r) + ' ' + ('Order' | r) | xlat}}</small>
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="btn" ng-class="{'btn-warning': cart.$invalid, 'btn-success': !cart.$invalid }" ng-click="checkOut()" ng-disabled="cart.$invalid || kitValidation">
-                            <i ng-show="cart.$invalid || kitValidation" class="fa fa-warning"></i>
-                            <span>{{'Check Out' | r | xlat}} {{window.outerWidth}}</span>
-                        </button>
-                    </li>
-                </ul>
-
+                <div class="row">
+                    <button class="btn btn-shop col-xs-3"  ng-click="continueShopping()">
+                        Continue Shopping
+                    </button>
+                    <button type="button" class="btn btn-danger col-xs-3" ng-click="currentOrder.Status == 'AwaitingApproval' ? cancelEdit() : cancelOrder()">
+                        <small ng-if="currentOrder.Status != 'AwaitingApproval'">{{('Cancel' | r) + ' ' + ('Order' | r) | xlat}}</small>
+                        <small ng-if="currentOrder.Status == 'AwaitingApproval'">{{('Cancel' | r) + ' ' + ('Edit' | r) | xlat}}</small>
+                    </button>
+                    <button type="submit" class="btn btn-primary col-xs-3" ng-click="saveChanges()">
+                        <loadingindicator  ng-show="displayLoadingIndicator" />
+                        <small>{{('Save' | r) + ' ' + ('Order' | r) | xlat}}</small>
+                    </button>
+                    <button type="button" class="btn col-xs-3" ng-class="{'btn-warning': cart.$invalid, 'btn-success': !cart.$invalid }" ng-click="checkOut()" ng-disabled="cart.$invalid || kitValidation">
+                        <i ng-show="cart.$invalid || kitValidation" class="fa fa-warning"></i>
+                        <span>{{'Check Out' | r | xlat}} {{window.outerWidth}}</span>
+                    </button>
+                </div>
             </div>
         </form>
     </div>

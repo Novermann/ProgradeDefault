@@ -38,6 +38,10 @@ four51.app.directive('ordershipping', ['Order', 'Shipper', 'Address', 'AddressLi
 				var auto = $scope.currentOrder.autoID;
 				Order.save($scope.currentOrder,
 					function(data) {
+						angular.forEach(data.OrderFields, function(field) {
+							if (field.IsRadioButtons == true && field.Value == "True")
+								field.Value = true;
+						});
 						$scope.currentOrder = data;
 						$scope.displayLoadingIndicator = false;
 						if (auto) {

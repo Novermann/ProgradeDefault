@@ -147,4 +147,15 @@ function ($scope, $routeParams, $location, $451, Order, OrderConfig, User) {
 	$scope.cancelEdit = function() {
 		$location.path('order');
 	};
+	
+	//Get Shipping Rates Based on State and Zip Code
+    $scope.States = Resources.usStates;
+    $scope.location = {};
+
+    $scope.fetch = function() {
+        Shipper.getRates($scope.location, $scope.currentOrder, function(data) {
+            $scope.rate = data;
+        });
+    };
+	
 }]);
