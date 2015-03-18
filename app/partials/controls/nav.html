@@ -43,25 +43,25 @@
                             <span class="hidden-xs">{{'Account' | r}}</span>
                         </a>
                     </li>
-                    <li class="dropdown admin-user visible-md visible-lg" ng-class="{'active': isActive(['admin', 'addresses', 'address', 'messages', 'message'])}">
+                    <li class="dropdown admin-user visible-md visible-lg">
                         <a id="451qa_acct_link2" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-cog"></i>
                             <span class="hidden-xs">{{'Account' | r}}</span>
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li id="451qa_user_link" ng-show="user.Permissions.contains('ViewSelfAdmin')" class="admin">
+                            <li id="451qa_user_link" ng-show="user.Permissions.contains('ViewSelfAdmin')" ng-class="{'active': isActive('admin')}">
                                 <a href="admin">
                                     {{'User Information' | r}}
                                 </a>
                             </li>
-                            <li id="451qa_addy_link" ng-show="user.Permissions.contains('CreateShipToAddress') || user.Permissions.contains('CreateBillToAddress')" class="addresses">
+                            <li id="451qa_addy_link" ng-show="user.Permissions.contains('CreateShipToAddress') || user.Permissions.contains('CreateBillToAddress')" ng-class="{'active': isActive('addresses')}">
                                 <a href="addresses">
                                     {{'Addresses' | r}}
                                 </a>
                             </li>
-                    <li class="favorites hidden-xs" ng-class="{'active': isActive('favoriteorders')}">
-                        <a id="451qa_fave_link" href="favoriteorders">
+                    <li id="451qa_fave_link" class="favorites hidden-xs" ng-class="{'active': isActive('favoriteorders')}">
+                        <a href="favoriteorders">
 {{'Favorites' | r}}
                         </a>
                     </li>

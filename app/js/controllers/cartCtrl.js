@@ -148,6 +148,13 @@ function ($scope, $routeParams, $location, $451, Order, OrderConfig, User, Resou
 		$location.path('order');
 	};
 	
+	$scope.$watch('currentOrder', function() {
+		angular.forEach($scope.currentOrder.LineItems, function(item) {
+			if (item.Specs.pa_shipping_height)
+				item.SpecsLength = item.SpecsLength - 5;
+		});
+	});
+	
 	//Get Shipping Rates Based on State and Zip Code
     $scope.States = Resources.usStates;
     $scope.location = {};

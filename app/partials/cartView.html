@@ -26,7 +26,7 @@
                     <br/>
                     <div ng-repeat="r in rate">
                         <span>{{r[$index].name}}:</span>
-                        <span>{{r[$index].rate}}</span>
+                        <span>${{r[$index].rate}}</span>
                     </div>
                 </div>
             </form>
@@ -52,7 +52,7 @@
                     <button type="button" title="Remove Item" class="btn btn-danger" ng-click="removeItem(item)">
                         <span class="fa fa-minus-circle fa-inverse"></span>
                     </button>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <div class="row">
                             <div class="col-xs-6 col-sm-12 col-md-6 ">
                                 <div class="view-form-icon">
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-8">
                         <div class="row">
                             <div class="col-md-6" ng-if="currentOrder.Status != 'AwaitingApproval'">
                                 <a ng-href="{{item.Product.Type == 'Kit' ? 'kit' : 'cart'}}/{{item.Product.InteropID}}/{{$index}}">
