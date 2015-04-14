@@ -5,7 +5,7 @@
         </h3>
         <span>{{item.Product.Name}}</span>
         <ul ng-show="item.Specs | filter:{'CanSetForLineItem':true}.length > 0">
-            <li class="text-center" ng-repeat="spec in item.Specs | onproperty:{Property: 'CanSetForLineItem', Value: true} ">
+            <li class="text-center" ng-repeat="spec in item.Specs | hideSpecs | onproperty:{Property: 'CanSetForLineItem', Value: true} ">
                 <span class="text-info">{{spec.Name}}</span>
                 <span ng-if="spec.ControlType == 'File'"><a ng-href="{{spec.File.Url}}">{{spec.File.OriginalName + Extension}}</a></span>
                 <span ng-if="spec.ControlType != 'File'">{{spec.Value || ('(unspecified)' | xlat)}}</span>
