@@ -1,7 +1,9 @@
 <div class="panel-order-history" ng-repeat="item in order.LineItems">
     <div class="col-sm-6">
-        <h3 class="text-primary">
-            {{item.ProductIDText}}
+        <h3 class="text primary>">
+        	<a ng-href="order/{{order.ID}}/{{$index}}">
+            	{{item.ProductIDText}}
+        	</a>
         </h3>
         <span>{{item.Product.Name}}</span>
         <ul ng-show="item.Specs | filter:{'CanSetForLineItem':true}.length > 0">
